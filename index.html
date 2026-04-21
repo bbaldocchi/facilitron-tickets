@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilitron Tickets - Master Template QA Checklist</title>
+<style>
+  :root {
+    --navy: #132238;
+    --tron: #00b4d8;
+    --tron-light: #e0f7fc;
+    --violet: #5b2b82;
+    --violet-light: #f3eef8;
+    --sand: #f5f0e8;
+    --sand-dark: #e8dfc9;
+    --white: #ffffff;
+    --gray-1: #f8f9fa;
+    --gray-2: #e9ecef;
+    --gray-3: #ced4da;
+    --gray-4: #868e96;
+    --gray-5: #343a40;
+    --pass: #1a9e6b;
+    --pass-light: #e6f7f1;
+    --fail: #d9363e;
+    --fail-light: #fdedef;
+    --warn: #e07b00;
+    --warn-light: #fff3e0;
+    --na: #868e96;
+    --na-light: #f1f3f5;
+    --radius: 8px;
+    --radius-sm: 4px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--gray-1);
+    color: var(--gray-5);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topbar-logo {
+    width: 24px;
+    height: 24px;
+    background: var(--tron);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+  }
+  .topbar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+  .topbar-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .progress-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 99px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+    min-width: 100px;
+    text-align: center;
+  }
+  .btn-reset {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius-sm);
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-reset:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+  }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--white);
+    border-right: 1px solid var(--gray-2);
+    padding: 20px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding: 0 16px 8px;
+    margin-top: 16px;
+  }
+  .sidebar-section-label:first-child { margin-top: 0; }
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.1s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+    color: var(--gray-5);
+  }
+  .sidebar-nav-item:hover {
+    background: var(--gray-1);
+  }
+  .sidebar-nav-item.active {
+    background: var(--tron-light);
+    border-left-color: var(--tron);
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .sidebar-nav-item .nav-label {
+    font-size: 13px;
+    flex: 1;
+  }
+  .sidebar-nav-item .nav-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 99px;
+    background: var(--gray-2);
+    color: var(--gray-4);
+    min-width: 24px;
+    text-align: center;
+  }
+  .sidebar-nav-item .nav-badge.has-fail {
+    background: var(--fail-light);
+    color: var(--fail);
+  }
+  .sidebar-nav-item .nav-badge.all-pass {
+    background: var(--pass-light);
+    color: var(--pass);
+  }
+
+  /* MAIN */
+  .main {
+    padding: 24px;
+    max-width: 860px;
+  }
+
+  /* SESSION HEADER */
+  .session-header {
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .session-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .session-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-4);
+  }
+  .session-input {
+    border: 1px solid var(--gray-3);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--gray-5);
+    background: var(--white);
+    min-width: 160px;
+    outline: none;
+  }
+  .session-input:focus {
+    border-color: var(--tron);
+  }
+
+  /* SECTION */
+  .qa-section {
+    margin-bottom: 32px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-count {
+    font-size: 12px;
+    color: var(--gray-4);
+    margin-left: auto;
+  }
+
+  /* CHECKLIST TABLE */
+  .checklist {
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .checklist-row {
+    display: grid;
+    grid-template-columns: 1fr 160px 120px;
+    border-bottom: 1px solid var(--gray-2);
+    transition: background 0.1s;
+  }
+  .checklist-row:last-child { border-bottom: none; }
+  .checklist-row:hover { background: var(--gray-1); }
+  .checklist-row.status-pass { border-left: 3px solid var(--pass); }
+  .checklist-row.status-fail { border-left: 3px solid var(--fail); }
+  .checklist-row.status-warn { border-left: 3px solid var(--warn); }
+  .checklist-row.status-na { border-left: 3px solid var(--gray-3); opacity: 0.65; }
+
+  .col-item {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .item-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-5);
+  }
+  .item-hint {
+    font-size: 11px;
+    color: var(--gray-4);
+    line-height: 1.4;
+  }
+  .item-breakpoint {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--navy);
+    color: var(--white);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+    width: fit-content;
+  }
+  .item-breakpoint.bp-mobile { background: var(--violet); }
+  .item-breakpoint.bp-tablet { background: var(--tron); color: var(--navy); }
+  .item-breakpoint.bp-desktop { background: var(--navy); }
+  .item-breakpoint.bp-all { background: var(--gray-4); }
+
+  .col-notes {
+    padding: 10px 12px;
+    border-left: 1px solid var(--gray-2);
+  }
+  .notes-input {
+    width: 100%;
+    height: 100%;
+    min-height: 38px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 12px;
+    color: var(--gray-5);
+    resize: none;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+  .notes-input::placeholder { color: var(--gray-3); }
+
+  .col-status {
+    padding: 10px 12px;
+    border-left: 1px solid var(--gray-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .status-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gray-3);
+    background: var(--white);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+  .status-btn:hover { transform: scale(1.1); }
+  .status-btn.btn-pass { color: var(--gray-4); }
+  .status-btn.btn-pass.selected { background: var(--pass); border-color: var(--pass); color: var(--white); }
+  .status-btn.btn-fail { color: var(--gray-4); }
+  .status-btn.btn-fail.selected { background: var(--fail); border-color: var(--fail); color: var(--white); }
+  .status-btn.btn-na { color: var(--gray-4); font-size: 10px; }
+  .status-btn.btn-na.selected { background: var(--gray-3); border-color: var(--gray-3); color: var(--white); }
+
+  /* COLUMN HEADERS */
+  .checklist-header {
+    display: grid;
+    grid-template-columns: 1fr 160px 120px;
+    background: var(--navy);
+    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .checklist-header > div {
+    padding: 8px 16px;
+  }
+  .checklist-header > div + div {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+  }
+
+  /* SUMMARY PANEL */
+  .summary-bar {
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow);
+  }
+  .summary-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 56px;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-num.c-pass { color: var(--pass); }
+  .stat-num.c-fail { color: var(--fail); }
+  .stat-num.c-warn { color: var(--warn); }
+  .stat-num.c-total { color: var(--navy); }
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-4);
+    font-weight: 600;
+  }
+  .summary-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--gray-2);
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    min-width: 120px;
+  }
+  .progress-bar-track {
+    height: 8px;
+    background: var(--gray-2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--tron), var(--pass));
+    border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+  .progress-pct {
+    font-size: 12px;
+    color: var(--gray-4);
+    margin-top: 4px;
+  }
+  .btn-export {
+    margin-left: auto;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-export:hover { background: #1d3557; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">FT</div>
+    <div>
+      <div class="topbar-title">Facilitron Tickets - Master Template QA</div>
+      <div class="topbar-subtitle">Regression Checklist</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="progress-pill" id="topbar-progress">0 / 0 checked</div>
+    <button class="btn-reset" onclick="resetAll()">Reset All</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section-label">Sections</div>
+  </nav>
+
+  <div class="main">
+
+    <!-- SESSION INFO -->
+    <div class="session-header">
+      <div class="session-field">
+        <span class="session-label">Tester Name</span>
+        <input class="session-input" id="field-tester" type="text" placeholder="Your name">
+      </div>
+      <div class="session-field">
+        <span class="session-label">Client / Instance</span>
+        <input class="session-input" id="field-client" type="text" placeholder="e.g. Upper Darby SD">
+      </div>
+      <div class="session-field">
+        <span class="session-label">Date</span>
+        <input class="session-input" id="field-date" type="date">
+      </div>
+      <div class="session-field">
+        <span class="session-label">Template Version</span>
+        <input class="session-input" id="field-version" type="text" placeholder="e.g. v1.0">
+      </div>
+    </div>
+
+    <!-- SUMMARY BAR -->
+    <div class="summary-bar">
+      <div class="summary-stat">
+        <span class="stat-num c-total" id="stat-total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-stat">
+        <span class="stat-num c-pass" id="stat-pass">0</span>
+        <span class="stat-label">Pass</span>
+      </div>
+      <div class="summary-stat">
+        <span class="stat-num c-fail" id="stat-fail">0</span>
+        <span class="stat-label">Fail</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-pct" id="progress-pct">0% complete</div>
+      </div>
+      <button class="btn-export" onclick="exportReport()">Export Report</button>
+    </div>
+
+    <!-- CHECKLIST CONTENT -->
+    <div id="checklist-root"></div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const SECTIONS = [
+  {
+    id: "brand",
+    icon: "B",
+    title: "Brand and Colors",
+    items: [
+      { label: "Facilitron logo renders correctly", hint: "Check src URL and display size in header", bp: "all" },
+      { label: "Tron blue (#00b4d8) used for CTAs and accents", hint: "Verify no leftover client brand colors", bp: "all" },
+      { label: "Violet (#5b2b82) present for secondary accents", hint: "Badges, pills, or category tags", bp: "all" },
+      { label: "Sand background (#f5f0e8) applied to page body", hint: "Check --f-sand CSS variable or bg color", bp: "all" },
+      { label: "Navy (#132238) used for header and text", hint: "Header bar and headings should be navy not black", bp: "all" },
+      { label: "No leftover client colors (e.g. UDSD purple #5B2B82 as primary)", hint: "Do a visual scan for anything that stands out", bp: "all" },
+      { label: "Fonts load correctly (Archivo / Inter or fallback Arial)", hint: "If @import blocked by VBO, Arial fallback should be clean", bp: "all" },
+      { label: "Powered-by Facilitron Tickets banner visible in footer", hint: "Check .PoweredByBanner at bottom of page", bp: "all" }
+    ]
+  },
+  {
+    id: "header",
+    icon: "H",
+    title: "Header",
+    items: [
+      { label: "Logo is left-aligned and not overflowing", hint: "Check on narrow viewports too", bp: "all" },
+      { label: "Navigation links render and are clickable", hint: "Verify no broken href values", bp: "desktop" },
+      { label: "Cart icon shows correct item count (0 when empty)", hint: ".CartCount or equivalent element", bp: "all" },
+      { label: "Account/profile icon visible and clickable", hint: "Should not be hidden by overflow", bp: "all" },
+      { label: "Globe/language icon hidden (display:none)", hint: "#IconGlobeTop should be hidden per template rule", bp: "all" },
+      { label: "Header is white background with navy icons", hint: "No dark header unless intentional for a client", bp: "all" },
+      { label: "Header height is consistent across pages", hint: "Landing, event detail, and checkout should match", bp: "all" },
+      { label: "Sticky header stays in place on scroll", hint: "Scroll down 500px and verify header stays at top", bp: "all" },
+      { label: "Icon hover states work (tron cyan glow + scale)", hint: "Hover each icon individually", bp: "desktop" },
+      { label: "Hamburger menu appears on mobile", hint: "Should replace nav links below 768px", bp: "mobile" },
+      { label: "Mobile menu opens and closes correctly", hint: "Tap hamburger, check all links visible, tap again to close", bp: "mobile" }
+    ]
+  },
+  {
+    id: "hero",
+    icon: "V",
+    title: "Hero Banner",
+    items: [
+      { label: "Hero banner renders at correct height", hint: "Should not be collapsed or too tall", bp: "all" },
+      { label: "Hero background (video or image) loads", hint: "No blank gray box -- fallback gradient if video fails", bp: "all" },
+      { label: "Overlay text is readable over background", hint: "Check contrast on both light and dark backgrounds", bp: "all" },
+      { label: "Eyebrow label, title, and subtitle all present", hint: "Verify placeholder text replaced with client content", bp: "all" },
+      { label: "Hero content is vertically and horizontally centered", hint: "Check alignment at 1280px, 1024px, and 375px", bp: "all" },
+      { label: "Hero overlay color/opacity does not obscure background too heavily", hint: "Background should still be visible through overlay", bp: "all" },
+      { label: "Hero text stacks correctly on mobile", hint: "No overflow, no truncation", bp: "mobile" }
+    ]
+  },
+  {
+    id: "filterbar",
+    icon: "F",
+    title: "Filter Bar and Toolbar",
+    items: [
+      { label: "Filter pills render in a horizontal row", hint: "Should not wrap awkwardly at desktop width", bp: "desktop" },
+      { label: "Filter bar scrolls horizontally on mobile", hint: "Pills should not stack vertically on small screens", bp: "mobile" },
+      { label: "Active/selected pill state is visually distinct", hint: "Selected pill should have a tron or navy filled background", bp: "all" },
+      { label: "Filter JavaScript removed from master template", hint: "No onclick filtering logic -- pills are display only", bp: "all" },
+      { label: "Events toolbar (sort, count, view toggle) renders", hint: "Check above the event card grid", bp: "all" },
+      { label: "Section heading above event grid is present", hint: "e.g. Upcoming Events or similar label", bp: "all" }
+    ]
+  },
+  {
+    id: "cards",
+    icon: "C",
+    title: "Event Cards",
+    items: [
+      { label: "Cards display in a responsive grid (3 col > 2 col > 1 col)", hint: "Desktop 3-up, tablet 2-up, mobile 1-up", bp: "all" },
+      { label: "Event image loads and is cropped correctly", hint: "No stretched or missing images", bp: "all" },
+      { label: "Card title, date, venue, and price all present", hint: "Check a real event and a placeholder", bp: "all" },
+      { label: "CTA button label reads correctly", hint: "e.g. Register Now -- not a VBO default string", bp: "all" },
+      { label: "Card hover lift effect works", hint: "Hover a card -- should shift up slightly with shadow", bp: "desktop" },
+      { label: "Card border radius matches template spec (16px or per CSS var)", hint: "No square corners unless intentional", bp: "all" },
+      { label: "Sold-out state renders with correct badge/label", hint: "Sold out badge color should match brand", bp: "all" },
+      { label: "Cards with no image fall back gracefully", hint: "No broken image icon -- should use a placeholder or gradient", bp: "all" },
+      { label: "Card grid has correct gutters (not too tight or too wide)", hint: "12-16px gap recommended", bp: "all" }
+    ]
+  },
+  {
+    id: "eventdetail",
+    icon: "E",
+    title: "Event Detail Page",
+    items: [
+      { label: "Page layout uses two-column grid (content + sidebar)", hint: "Sidebar contains ticket selection and cart", bp: "desktop" },
+      { label: "Two-column collapses to single column on mobile", hint: "Sidebar should stack below content on mobile", bp: "mobile" },
+      { label: "Event title, date/time, venue are all visible", hint: "Check against VBO data output", bp: "all" },
+      { label: "Ticket selection box is styled (not VBO default)", hint: ".TicketSelectContainer should have custom CSS", bp: "all" },
+      { label: "Ticket tier labels and prices render correctly", hint: "Font, spacing, and color match template", bp: "all" },
+      { label: "Add to Cart / Register button matches brand style", hint: "Tron blue fill, white text, correct border radius", bp: "all" },
+      { label: "Ticket selection header has no rounded corners (per template spec)", hint: "Check .TicketSelectHeader -- flat top", bp: "all" },
+      { label: "Cart summary uses Archivo font (or fallback)", hint: "Cart should not inherit VBO default sans-serif", bp: "all" },
+      { label: "Calendar card background renders correctly", hint: "Section 25 in CSS -- verify date block styling", bp: "all" }
+    ]
+  },
+  {
+    id: "footer",
+    icon: "T",
+    title: "Footer",
+    items: [
+      { label: "Promo/campaign block renders above footer nav", hint: "Check .DemoInsightGrid or equivalent promo section", bp: "all" },
+      { label: "Footer nav links are present and styled", hint: "Links should be white or light on dark background", bp: "all" },
+      { label: "Powered-by banner is at very bottom of page", hint: ".PoweredByBanner -- Facilitron Tickets branding", bp: "all" },
+      { label: "Footer background color is navy or dark (not white)", hint: "Should contrast with page body", bp: "all" },
+      { label: "Footer does not overflow or cause horizontal scroll", hint: "Check at 375px mobile width", bp: "mobile" }
+    ]
+  },
+  {
+    id: "mobile",
+    icon: "M",
+    title: "Mobile Ticket (ticket.html)",
+    items: [
+      { label: "Ticket renders without horizontal overflow", hint: "Max-width should be ~375px and fit screen", bp: "mobile" },
+      { label: "Facilitron logo on ticket is correctly sized", hint: "Should not be too large or too small", bp: "mobile" },
+      { label: "QR code block has sufficient whitespace around it", hint: "Should be scannable with clear padding", bp: "mobile" },
+      { label: "Event name, date, time, and venue on ticket are readable", hint: "Font size should not be below 13px", bp: "mobile" },
+      { label: "Ticket background color uses brand sand or white", hint: "Not VBO default gray", bp: "mobile" },
+      { label: "Continue button on mobile overlay is not cut off", hint: "Section 53 fix -- verify button is fully visible", bp: "mobile" },
+      { label: "Logo left-aligned on mobile (not centered)", hint: "Section 54 -- mobile logo left alignment", bp: "mobile" }
+    ]
+  },
+  {
+    id: "responsive",
+    icon: "R",
+    title: "Responsive Breakpoints",
+    items: [
+      { label: "No horizontal scroll at 375px (iPhone SE)", hint: "Open DevTools, set width to 375, scroll right", bp: "mobile" },
+      { label: "No horizontal scroll at 768px (tablet)", hint: "Set width to 768 in DevTools", bp: "tablet" },
+      { label: "Layout correct at 1024px (small laptop)", hint: "Two-column should be intact, no overlap", bp: "tablet" },
+      { label: "Layout correct at 1280px (standard desktop)", hint: "Primary target width", bp: "desktop" },
+      { label: "Layout correct at 1440px (wide desktop)", hint: "Max-width container should center correctly", bp: "desktop" },
+      { label: "SignIn page logo stays left-aligned at all widths", hint: "Regression from FTix Sign In page -- logo must not drift right", bp: "all" },
+      { label: "SignIn card does not overflow at 375px", hint: "Padding and max-width should flex correctly", bp: "mobile" },
+      { label: "Hamburger nav replaces desktop nav below 768px", hint: "Desktop nav links should be hidden at mobile width", bp: "mobile" },
+      { label: "Hero text does not overflow or get clipped on mobile", hint: "Check at 375px and 414px", bp: "mobile" }
+    ]
+  },
+  {
+    id: "css",
+    icon: "S",
+    title: "CSS Health",
+    items: [
+      { label: "No special characters in CSS (no em dashes, smart quotes, etc.)", hint: "Only plain ASCII -- search file for -- and curved quote chars", bp: "all" },
+      { label: "CSS file size is under VBO field limit", hint: "VBO rejects files over a certain byte limit -- verify it saved", bp: "all" },
+      { label: "No @import statements (VBO blocks them)", hint: "Fonts must be loaded via link tag or omitted", bp: "all" },
+      { label: "CSS variables defined in :root block", hint: "--f-navy, --f-tron, --f-violet, --f-sand, --f-transition etc.", bp: "all" },
+      { label: "No leftover UDSD class names or selectors", hint: "Search for udsd, upper-darby, or #5B2B82 as primary", bp: "all" },
+      { label: "!important overrides are intentional (not excessive)", hint: "Each !important should have a documented reason", bp: "all" },
+      { label: "All 50+ CSS sections present (compare against section map in brief)", hint: "Open CSS and count major comment-delimited sections", bp: "all" }
+    ]
+  },
+  {
+    id: "integration",
+    icon: "I",
+    title: "VBO Integration",
+    items: [
+      { label: "Proxy URL references use tickets.facilitron.com (not events or old domain)", hint: "Search HTML files for all URL references", bp: "all" },
+      { label: "Custom HTML field in VBO admin saved without error", hint: "Paste header.html -- confirm VBO accepts it", bp: "all" },
+      { label: "Custom CSS field in VBO admin saved without error", hint: "Confirm no size or parse errors on save", bp: "all" },
+      { label: "Footer HTML field in VBO admin saved without error", hint: "Paste footer.html and save", bp: "all" },
+      { label: "Mobile ticket template saved in VBO admin", hint: "Paste ticket.html into the mobile ticket field", bp: "all" },
+      { label: "Mailchimp integration not referencing old domain", hint: "If Mailchimp sends links, verify they use correct proxy URL", bp: "all" }
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {}; // key: sectionId-itemIndex, value: {status, notes}
+
+function getKey(sectionId, itemIndex) {
+  return sectionId + "-" + itemIndex;
+}
+
+function saveState() {
+  try {
+    const sessionData = {
+      tester: document.getElementById("field-tester").value,
+      client: document.getElementById("field-client").value,
+      date: document.getElementById("field-date").value,
+      version: document.getElementById("field-version").value,
+      checks: state
+    };
+    localStorage.setItem("ftix-qa-state", JSON.stringify(sessionData));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem("ftix-qa-state");
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    state = data.checks || {};
+    if (data.tester) document.getElementById("field-tester").value = data.tester;
+    if (data.client) document.getElementById("field-client").value = data.client;
+    if (data.date) document.getElementById("field-date").value = data.date;
+    if (data.version) document.getElementById("field-version").value = data.version;
+  } catch(e) {}
+}
+
+function resetAll() {
+  if (!confirm("Reset all checklist data? This cannot be undone.")) return;
+  state = {};
+  try { localStorage.removeItem("ftix-qa-state"); } catch(e) {}
+  renderAll();
+  updateSummary();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function bpClass(bp) {
+  if (bp === "mobile") return "bp-mobile";
+  if (bp === "tablet") return "bp-tablet";
+  if (bp === "desktop") return "bp-desktop";
+  return "bp-all";
+}
+
+function bpLabel(bp) {
+  if (bp === "mobile") return "Mobile";
+  if (bp === "tablet") return "Tablet";
+  if (bp === "desktop") return "Desktop";
+  return "All";
+}
+
+function renderSection(section) {
+  const key0 = getKey(section.id, 0);
+  const wrapper = document.createElement("div");
+  wrapper.className = "qa-section";
+  wrapper.id = "section-" + section.id;
+
+  const header = document.createElement("div");
+  header.className = "section-header";
+  header.innerHTML =
+    '<div class="section-icon">' + section.icon + '</div>' +
+    '<div class="section-title">' + section.title + '</div>' +
+    '<div class="section-count" id="count-' + section.id + '">' + section.items.length + ' items</div>';
+  wrapper.appendChild(header);
+
+  const table = document.createElement("div");
+  table.className = "checklist";
+
+  // header row
+  const hrow = document.createElement("div");
+  hrow.className = "checklist-header";
+  hrow.innerHTML =
+    '<div>Check Item</div>' +
+    '<div>Notes</div>' +
+    '<div>Status</div>';
+  table.appendChild(hrow);
+
+  section.items.forEach(function(item, idx) {
+    const k = getKey(section.id, idx);
+    const s = state[k] || { status: null, notes: "" };
+
+    const row = document.createElement("div");
+    row.className = "checklist-row" + (s.status ? " status-" + s.status : "");
+    row.id = "row-" + k;
+
+    // item col
+    const colItem = document.createElement("div");
+    colItem.className = "col-item";
+    colItem.innerHTML =
+      '<div class="item-label">' + item.label + '</div>' +
+      '<div class="item-hint">' + item.hint + '</div>' +
+      '<span class="item-breakpoint ' + bpClass(item.bp) + '">' + bpLabel(item.bp) + '</span>';
+    row.appendChild(colItem);
+
+    // notes col
+    const colNotes = document.createElement("div");
+    colNotes.className = "col-notes";
+    const ta = document.createElement("textarea");
+    ta.className = "notes-input";
+    ta.placeholder = "Add note...";
+    ta.value = s.notes || "";
+    ta.addEventListener("input", function() {
+      if (!state[k]) state[k] = { status: null, notes: "" };
+      state[k].notes = ta.value;
+      saveState();
+    });
+    colNotes.appendChild(ta);
+    row.appendChild(colNotes);
+
+    // status col
+    const colStatus = document.createElement("div");
+    colStatus.className = "col-status";
+
+    const btnP = document.createElement("button");
+    btnP.className = "status-btn btn-pass" + (s.status === "pass" ? " selected" : "");
+    btnP.title = "Pass";
+    btnP.textContent = "P";
+    btnP.addEventListener("click", function() { setStatus(section.id, idx, "pass"); });
+
+    const btnF = document.createElement("button");
+    btnF.className = "status-btn btn-fail" + (s.status === "fail" ? " selected" : "");
+    btnF.title = "Fail";
+    btnF.textContent = "F";
+    btnF.addEventListener("click", function() { setStatus(section.id, idx, "fail"); });
+
+    const btnN = document.createElement("button");
+    btnN.className = "status-btn btn-na" + (s.status === "na" ? " selected" : "");
+    btnN.title = "N/A";
+    btnN.textContent = "N/A";
+    btnN.addEventListener("click", function() { setStatus(section.id, idx, "na"); });
+
+    colStatus.appendChild(btnP);
+    colStatus.appendChild(btnF);
+    colStatus.appendChild(btnN);
+    row.appendChild(colStatus);
+
+    table.appendChild(row);
+  });
+
+  wrapper.appendChild(table);
+  return wrapper;
+}
+
+function setStatus(sectionId, itemIndex, status) {
+  const k = getKey(sectionId, itemIndex);
+  if (!state[k]) state[k] = { status: null, notes: "" };
+
+  // toggle off if clicking same status
+  if (state[k].status === status) {
+    state[k].status = null;
+  } else {
+    state[k].status = status;
+  }
+
+  // re-render that row
+  const row = document.getElementById("row-" + k);
+  const s = state[k];
+  row.className = "checklist-row" + (s.status ? " status-" + s.status : "");
+
+  const btns = row.querySelectorAll(".status-btn");
+  btns[0].className = "status-btn btn-pass" + (s.status === "pass" ? " selected" : "");
+  btns[1].className = "status-btn btn-fail" + (s.status === "fail" ? " selected" : "");
+  btns[2].className = "status-btn btn-na" + (s.status === "na" ? " selected" : "");
+
+  saveState();
+  updateSummary();
+  updateSidebarBadge(sectionId);
+}
+
+function renderAll() {
+  const root = document.getElementById("checklist-root");
+  root.innerHTML = "";
+  SECTIONS.forEach(function(section) {
+    root.appendChild(renderSection(section));
+  });
+  renderSidebar();
+  updateSummary();
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.innerHTML = '<div class="sidebar-section-label">Sections</div>';
+  SECTIONS.forEach(function(section) {
+    const item = document.createElement("a");
+    item.className = "sidebar-nav-item";
+    item.href = "#section-" + section.id;
+    item.innerHTML =
+      '<span class="nav-label">' + section.title + '</span>' +
+      '<span class="nav-badge" id="badge-' + section.id + '">' + section.items.length + '</span>';
+    sidebar.appendChild(item);
+  });
+}
+
+function updateSidebarBadge(sectionId) {
+  const section = SECTIONS.find(function(s) { return s.id === sectionId; });
+  if (!section) return;
+  const badge = document.getElementById("badge-" + sectionId);
+  if (!badge) return;
+
+  let pass = 0, fail = 0, done = 0;
+  section.items.forEach(function(item, idx) {
+    const k = getKey(sectionId, idx);
+    const s = state[k];
+    if (s && s.status) {
+      done++;
+      if (s.status === "pass") pass++;
+      if (s.status === "fail") fail++;
+    }
+  });
+
+  if (fail > 0) {
+    badge.className = "nav-badge has-fail";
+    badge.textContent = fail + " fail";
+  } else if (done === section.items.length) {
+    badge.className = "nav-badge all-pass";
+    badge.textContent = "done";
+  } else {
+    badge.className = "nav-badge";
+    badge.textContent = done + "/" + section.items.length;
+  }
+}
+
+function updateSummary() {
+  let total = 0, pass = 0, fail = 0, done = 0;
+  SECTIONS.forEach(function(section) {
+    section.items.forEach(function(item, idx) {
+      total++;
+      const k = getKey(section.id, idx);
+      const s = state[k];
+      if (s && s.status) {
+        done++;
+        if (s.status === "pass") pass++;
+        if (s.status === "fail") fail++;
+      }
+    });
+  });
+
+  document.getElementById("stat-total").textContent = total;
+  document.getElementById("stat-pass").textContent = pass;
+  document.getElementById("stat-fail").textContent = fail;
+
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-pct").textContent = pct + "% complete";
+  document.getElementById("topbar-progress").textContent = done + " / " + total + " checked";
+
+  SECTIONS.forEach(function(section) {
+    updateSidebarBadge(section.id);
+  });
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+function exportReport() {
+  const tester = document.getElementById("field-tester").value || "Unknown";
+  const client = document.getElementById("field-client").value || "Unknown";
+  const date = document.getElementById("field-date").value || new Date().toISOString().slice(0,10);
+  const version = document.getElementById("field-version").value || "N/A";
+
+  let lines = [];
+  lines.push("FACILITRON TICKETS - MASTER TEMPLATE QA REPORT");
+  lines.push("================================================");
+  lines.push("Tester: " + tester);
+  lines.push("Client: " + client);
+  lines.push("Date: " + date);
+  lines.push("Version: " + version);
+  lines.push("");
+
+  let total = 0, pass = 0, fail = 0, na = 0;
+  SECTIONS.forEach(function(section) {
+    section.items.forEach(function(item, idx) {
+      total++;
+      const s = state[getKey(section.id, idx)];
+      if (s && s.status === "pass") pass++;
+      if (s && s.status === "fail") fail++;
+      if (s && s.status === "na") na++;
+    });
+  });
+
+  lines.push("SUMMARY");
+  lines.push("-------");
+  lines.push("Total Items: " + total);
+  lines.push("Pass: " + pass);
+  lines.push("Fail: " + fail);
+  lines.push("N/A: " + na);
+  lines.push("Unchecked: " + (total - pass - fail - na));
+  lines.push("");
+
+  SECTIONS.forEach(function(section) {
+    lines.push("--- " + section.title.toUpperCase() + " ---");
+    section.items.forEach(function(item, idx) {
+      const s = state[getKey(section.id, idx)] || {};
+      const status = s.status ? s.status.toUpperCase() : "UNCHECKED";
+      const notes = s.notes ? " | Notes: " + s.notes : "";
+      lines.push("[" + status + "] " + item.label + notes);
+    });
+    lines.push("");
+  });
+
+  const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "facilitron-qa-" + client.replace(/\s+/g, "-").toLowerCase() + "-" + date + ".txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById("field-date").value = new Date().toISOString().slice(0,10);
+loadState();
+renderAll();
+
+// auto-save session fields
+["field-tester","field-client","field-date","field-version"].forEach(function(id) {
+  document.getElementById(id).addEventListener("input", saveState);
+});
+</script>
+</body>
+</html>
